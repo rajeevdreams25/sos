@@ -19,4 +19,4 @@ uvicorn main:app --host 0.0.0.0 --port 80 --reload
 if you want to show the details of the api's then open your system browser and enter the below link
 ***************************************************************************************************
 
-http://<your ip address>/docs
+http://<your_ip_address>/docs
