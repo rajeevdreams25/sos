@@ -4,7 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from datetime import datetime
 from pydantic import BaseModel
-import json
+from datetime import datetime
+
+
 
 
 DATABASE_URL = "sqlite:///./sos.db"
@@ -65,6 +67,7 @@ class ItemCreate(BaseModel):
     sec_location: str
     message: str
 
+
 # FastAPI app
 app = FastAPI()
 
@@ -115,3 +118,18 @@ def get_last_inserted_row(db: Session = Depends(get_db)):
     return last_row
 
 
+
+def lastalert(db: Session):
+    last_row = db.query(Item).order_by(Item.id.desc()).first()
+    print("Last alert created_at:", last_row.created_at)
+    last_row.User_name = "no username"
+    current_utc_time = datetime.utcnow()
+    if last_row.created_at.hour == current_utc_time.hour and last_row.created_at.minute == current_utc_time.minute:
+        return last_row
+    else:
+        return {"message":"No Alerts"}
+
+
+
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=80)
